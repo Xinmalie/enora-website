@@ -1058,36 +1058,17 @@ function PaymentModal({ item, onClose, onSuccess, T }) {
 
 // ─── RESOURCES PAGE ───────────────────────────────────────────────────────────
 function ResourcesPage({ T }) {
-  const [payItem, setPayItem] = useState(null);
   const levelColorKey = { "A1": "teal", "A2": "teal", "B1": "orange", "B2": "orange", "C1": "magenta", "C2": "magenta" };
 
   const premiumItems = [
-    { id: "B2", title: "B2 Upper-Intermediate Worksheet", file: "/ENORA_B2_Worksheet.pdf", level: "B2" },
-    { id: "C1", title: "C1 Advanced Worksheet",           file: "/ENORA_C1_Worksheet.pdf", level: "C1" },
-    { id: "C2", title: "C2 Proficient Worksheet",         file: "/ENORA_C2_Worksheet.pdf", level: "C2" },
-    { id: "bundle", title: "Premium Bundle (B2 + C1 + C2)", file: null, level: "B2–C2" },
+    { id: "B2", title: "B2 Upper-Intermediate Worksheet", level: "B2", stripeLink: "https://buy.stripe.com/test_5kQ7sE6Njagrd5Y3kucEw00" },
+    { id: "C1", title: "C1 Advanced Worksheet",           level: "C1", stripeLink: null },
+    { id: "C2", title: "C2 Proficient Worksheet",         level: "C2", stripeLink: null },
+    { id: "bundle", title: "Premium Bundle (B2 + C1 + C2)", level: "B2–C2", stripeLink: null },
   ];
-
-  const handleSuccess = (item) => {
-    setPayItem(null);
-    if (item.id === "bundle") {
-      ["B2","C1","C2"].forEach(code => {
-        const a = document.createElement("a");
-        a.href = `/ENORA_${code}_Worksheet.pdf`;
-        a.download = `ENORA_${code}_Worksheet.pdf`;
-        a.click();
-      });
-    } else {
-      const a = document.createElement("a");
-      a.href = item.file;
-      a.download = item.file.split("/").pop();
-      a.click();
-    }
-  };
 
   return (
     <div>
-      {payItem && <PaymentModal item={payItem} onClose={() => setPayItem(null)} onSuccess={handleSuccess} T={T} />}
 
       <SLabel T={T}>Resources</SLabel>
       <p style={{ color: T.muted, marginBottom: 28, fontSize: 15 }}>
@@ -1130,7 +1111,7 @@ function ResourcesPage({ T }) {
           </div>
           <div style={{ textAlign: "right" }}>
             <div style={{ fontSize: 28, fontWeight: 900, color: T.orange }}>$2.50</div>
-            <Btn variant="orange" small T={T} onClick={() => setPayItem(premiumItems[3])}>🔓 Buy Bundle</Btn>
+            <Btn variant="orange" small T={T} disabled>Coming Soon</Btn>
           </div>
         </div>
       </Card>
@@ -1153,7 +1134,12 @@ function ResourcesPage({ T }) {
                   </div>
                 </div>
               </div>
-              <Btn variant="orange" small T={T} onClick={() => setPayItem(r)}>🔓 Unlock $1.00</Btn>
+              {r.stripeLink
+                ? <a href={r.stripeLink} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+                    <Btn variant="orange" small T={T}>🔓 Unlock $1.00</Btn>
+                  </a>
+                : <Btn variant="ghost" small T={T} disabled>Coming Soon</Btn>
+              }
             </Card>
           );
         })}
