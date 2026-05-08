@@ -154,12 +154,12 @@ const BLOG_POSTS = [
 ];
 
 const RESOURCES = [
-  { title: "A1–A2 Vocabulary Worksheet", type: "PDF", level: "A1/A2", free: true },
-  { title: "B1 Grammar Practice Pack", type: "PDF", level: "B1", free: true },
-  { title: "IELTS Writing Templates", type: "PDF", level: "B2–C1", free: false },
-  { title: "100 Academic Collocations", type: "PDF", level: "C1", free: false },
-  { title: "Phrasal Verbs Reference Guide", type: "PDF", level: "B1–B2", free: true },
-  { title: "IELTS Speaking Cue Cards Pack", type: "PDF", level: "B2", free: false },
+  { title: "A1 Beginner Worksheet",          type: "PDF", level: "A1", free: true,  file: "/ENORA_A1_Worksheet.pdf" },
+  { title: "A2 Elementary Worksheet",        type: "PDF", level: "A2", free: true,  file: "/ENORA_A2_Worksheet.pdf" },
+  { title: "B1 Intermediate Worksheet",      type: "PDF", level: "B1", free: true,  file: "/ENORA_B1_Worksheet.pdf" },
+  { title: "B2 Upper-Intermediate Worksheet",type: "PDF", level: "B2", free: false, file: "/ENORA_B2_Worksheet.pdf" },
+  { title: "C1 Advanced Worksheet",          type: "PDF", level: "C1", free: false, file: "/ENORA_C1_Worksheet.pdf" },
+  { title: "C2 Proficient Worksheet",        type: "PDF", level: "C2", free: false, file: "/ENORA_C2_Worksheet.pdf" },
 ];
 
 const FAQ = [
@@ -925,49 +925,51 @@ function VocabPage({ T }) {
 
 // ─── RESOURCES PAGE ───────────────────────────────────────────────────────────
 function ResourcesPage({ T }) {
-  const levelColorKey = { "A1/A2": "teal", "B1": "orange", "B2–C1": "magenta", "C1": "magenta", "B1–B2": "orange", "B2": "orange" };
+  const levelColorKey = { "A1": "teal", "A2": "teal", "B1": "orange", "B2": "orange", "C1": "magenta", "C2": "magenta" };
 
   return (
     <div>
       <SLabel T={T}>Resources</SLabel>
-      <p style={{ color: T.muted, marginBottom: 28, fontSize: 15 }}>Free and premium downloadable worksheets, reference guides, and practice packs.</p>
+      <p style={{ color: T.muted, marginBottom: 28, fontSize: 15 }}>Free and premium downloadable worksheets for every level — grammar, vocabulary, reading, writing, and speaking all in one PDF.</p>
 
       {/* Free */}
-      <SLabel T={T} color={T.teal}>Free Resources</SLabel>
+      <SLabel T={T} color={T.teal}>Free Worksheets</SLabel>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(265px,1fr))", gap: 12, marginBottom: 32 }}>
         {RESOURCES.filter(r => r.free).map(r => {
           const ck = levelColorKey[r.level] || "teal";
           return (
             <Card key={r.title} style={{ padding: 22 }} accent={T[ck]} T={T}>
               <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 14 }}>
-                <div style={{ width: 6, height: 6, borderRadius: "50%", background: T[ck], flexShrink: 0 }} />
+                <div style={{ fontSize: 28, color: T[ck] }}>📄</div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontWeight: 800, color: T.white, fontSize: 14, marginBottom: 6 }}>{r.title}</div>
-                  <div style={{ display: "flex", gap: 6 }}>
-                    <Badge text={r.type} color={T.teal} />
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                    <Badge text={r.type} color={T[ck]} />
                     <Badge text={r.level} color={T[ck]} />
                     <Badge text="FREE" color={T.teal} />
                   </div>
                 </div>
               </div>
-              <Btn variant="ghost" small T={T}>⬇ Download</Btn>
+              <a href={r.file} download style={{ textDecoration: "none" }}>
+                <Btn variant="teal" small T={T}>⬇ Download PDF</Btn>
+              </a>
             </Card>
           );
         })}
       </div>
 
       {/* Premium */}
-      <SLabel T={T} color={T.orange}>Premium Resources</SLabel>
+      <SLabel T={T} color={T.orange}>Premium Worksheets</SLabel>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(265px,1fr))", gap: 12, marginBottom: 28 }}>
         {RESOURCES.filter(r => !r.free).map(r => {
           const ck = levelColorKey[r.level] || "orange";
           return (
-            <Card key={r.title} style={{ padding: 22, opacity: 0.85 }} accent={T[ck]} T={T}>
+            <Card key={r.title} style={{ padding: 22, opacity: 0.8 }} accent={T[ck]} T={T}>
               <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 14 }}>
-                <div style={{ width: 6, height: 6, borderRadius: "50%", background: T[ck], flexShrink: 0 }} />
+                <div style={{ fontSize: 28, color: T[ck] }}>🔒</div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontWeight: 800, color: T.white, fontSize: 14, marginBottom: 6 }}>{r.title}</div>
-                  <div style={{ display: "flex", gap: 6 }}>
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                     <Badge text={r.type} color={T.orange} />
                     <Badge text={r.level} color={T[ck]} />
                     <Badge text="PREMIUM" color={T.orange} />
@@ -983,7 +985,7 @@ function ResourcesPage({ T }) {
       <Card style={{ padding: 24, border: `1px solid ${T.orange}30`, background: T.orange + "08" }} hover={false} T={T}>
         <h3 style={{ margin: "0 0 8px", fontSize: 16, color: T.orange, fontWeight: 800 }}>💳 Premium Access — Coming Soon</h3>
         <p style={{ color: T.muted, fontSize: 14, lineHeight: 1.75, margin: 0 }}>
-          Premium will unlock full IELTS mock tests, advanced worksheet packs, unlimited AI corrections, and more. Core lessons always stay free.
+          Premium will unlock B2, C1, and C2 worksheets, full IELTS mock tests, advanced grammar packs, and unlimited AI writing corrections. Core A1–B1 content always stays free.
         </p>
       </Card>
     </div>
